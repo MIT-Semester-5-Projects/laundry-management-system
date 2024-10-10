@@ -1,17 +1,17 @@
 services:
-  db:
+  mysql:
     image: mariadb:latest
-    container_name: my_mariadb
+    container_name: laundry_management_db
     environment:
-      MYSQL_ROOT_PASSWORD: platypus 
-      MYSQL_DATABASE: laundry_management
-      MYSQL_USER: perry
-      MYSQL_PASSWORD: the
-    ports:
-      - "3353:3306"
+      MYSQL_ROOT_PASSWORD: sexy  # Set your root password here
+      MYSQL_DATABASE: laundry_management  # Set your database name here
+      MYSQL_USER: perry  # Optional: Create a user for the database
+      MYSQL_PASSWORD: the  # Optional: Set the user's password
     volumes:
-      - db_data:/var/lib/mysql
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ./db_data:/var/lib/mysql  # Persist data in this folder
+      - ./lms.sql:/docker-entrypoint-initdb.d/lms.sql  # Initialize the DB with your script
+    ports:
+      - "3353:3306"  # Expose MySQL port for connections
 
 volumes:
   db_data:
