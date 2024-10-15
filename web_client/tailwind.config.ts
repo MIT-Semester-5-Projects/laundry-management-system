@@ -14,9 +14,9 @@ export default {
 				lightTheme: {
 					primary: '#6d9dc5', // Softer blue tone for reduced intensity
 					'primary-content': '#ffffff', // High contrast white for text on primary
-					secondary: '#c56d9d', // Complementary to primary for better harmony
+					secondary: '#8e8de3', // Complementary to primary for better harmony
 					'secondary-content': '#ffffff', // White for readability
-					accent: '#6dc5a7', // Calming greenish hue
+					accent: '#8de2e3', // Calming greenish hue
 					'accent-content': '#ffffff', // White for clear text on accents
 					neutral: '#e0e0e0', // Soft neutral for backgrounds
 					'neutral-content': '#2c2c2c', // Dark gray for contrast

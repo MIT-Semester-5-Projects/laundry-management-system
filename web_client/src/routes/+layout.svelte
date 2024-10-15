@@ -1,11 +1,17 @@
+<script>
+	import '../app.css';
+</script>
+
 <div class="flex min-h-screen flex-col">
 	<div class="navbar bg-primary justify-between">
 		<a href="/"
 			><img class="w-24" src="/logo.png" alt="Quick Smart Wash - Caring For Second Skin" /></a
 		>
 		<div class="flex-none">
-			<ul class="menu menu-horizontal px-1">
-				<li class="text-2xl"><a href="/">Home</a></li>
+			<ul class="menu text-2xl text-primary-content menu-horizontal px-1">
+				<li><a href="/">Home</a></li>
+				<li><a href="/services">Services</a></li>
+				<li class="bg-secondary rounded-xl"><a>Login</a></li>
 			</ul>
 		</div>
 	</div>
@@ -13,10 +19,10 @@
 		<slot></slot>
 	</main>
 
-	<footer class="footer bg-neutral text-primary items-center p-4">
+	<footer class="footer bg-base-content text-accent items-center p-4">
 		<aside class="grid-flow-col items-center">
 			<img class="w-16" src="/grayLogo.png" alt="Quick Smart Wash logo" />
-			<p class="hidden">
+			<p class="hidden md:block">
 				Copyright © {new Date().getFullYear()} - All right reserved
 			</p>
 		</aside>
