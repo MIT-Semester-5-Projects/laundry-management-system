@@ -1,5 +1,17 @@
-<script>
+<script lang="ts">
 	import '../app.css';
+	function switchTheme(event: Event) {
+		const checkbox = event.target as HTMLInputElement;
+		const main = document.querySelector('main');
+
+		if (main) {
+			if (checkbox.checked) {
+				main.style.backgroundImage = 'url(/darkbg.svg)';
+			} else {
+				main.style.backgroundImage = 'url(/lightbg.svg)';
+			}
+		}
+	}
 </script>
 
 <div class="flex min-h-screen flex-col">
@@ -8,22 +20,33 @@
 			><img class="w-24" src="/logo.png" alt="Quick Smart Wash - Caring For Second Skin" /></a
 		>
 		<div class="flex-none">
-			<ul class="menu text-2xl text-primary-content menu-horizontal px-1">
-				<li><a href="/">Home</a></li>
-				<li><a href="/services">Services</a></li>
-				<li class="bg-secondary rounded-xl"><a>Login</a></li>
+			<ul class="menu text-2xl text-primary-content menu-horizontal">
+				<li class="pt-4 pl-4">
+					<input
+						id="theme_switch"
+						type="checkbox"
+						value="darkTheme"
+						class="toggle theme-controller"
+						on:change={switchTheme}
+					/>
+				</li>
+				<li class="pr-2"><a href="/services">Services</a></li>
+				<li class="rounded-xl"><a href="#login_selection">Login</a></li>
 			</ul>
 		</div>
 	</div>
-	<main class="flex-1">
+	<main
+		style="background-image: url(/lightbg.svg) ; background-repeat: no-repeat; "
+		class="flex h-screen justify-center mb-auto"
+	>
 		<slot></slot>
 	</main>
 
-	<footer class="footer bg-base-content text-accent items-center p-4">
+	<footer class="footer fixed bottom-0 bg-base-content text-accent items-center p-4">
 		<aside class="grid-flow-col items-center">
 			<img class="w-16" src="/grayLogo.png" alt="Quick Smart Wash logo" />
 			<p class="hidden md:block">
-				Copyright © {new Date().getFullYear()} - All right reserved
+				Copyright © {new Date().getFullYear()} - All rights reserved
 			</p>
 		</aside>
 		<nav class="grid-flow-col pr-2 gap-4 md:place-self-center md:justify-self-end">
@@ -87,6 +110,7 @@
 					></path>
 				</svg>
 			</a>
+
 			<a href="https://facebook.com">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

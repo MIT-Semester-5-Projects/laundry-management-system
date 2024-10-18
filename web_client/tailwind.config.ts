@@ -14,9 +14,9 @@ export default {
 				lightTheme: {
 					primary: '#6d9dc5', // Softer blue tone for reduced intensity
 					'primary-content': '#ffffff', // High contrast white for text on primary
-					secondary: '#8e8de3', // Complementary to primary for better harmony
+					secondary: '#0369a1', // Complementary to primary for better harmony
 					'secondary-content': '#ffffff', // White for readability
-					accent: '#8de2e3', // Calming greenish hue
+					accent: '#0ea5e9', // Calming greenish hue
 					'accent-content': '#ffffff', // White for clear text on accents
 					neutral: '#e0e0e0', // Soft neutral for backgrounds
 					'neutral-content': '#2c2c2c', // Dark gray for contrast
@@ -34,26 +34,26 @@ export default {
 					'error-content': '#ffffff'
 				},
 				darkTheme: {
-					primary: '#6d9dc5', // Same soft blue to maintain consistency
-					'primary-content': '#ffffff', // White for clarity on dark backgrounds
-					secondary: '#c56d9d', // Matching complementary color
-					'secondary-content': '#ffffff', // White for readability
-					accent: '#6dc5a7', // Harmonious accent color
-					'accent-content': '#ffffff', // White for clarity
-					neutral: '#2e3440', // Darker neutral background
-					'neutral-content': '#d8dee9', // Light gray for text
-					'base-100': '#1b1f27', // Deep black-gray for dark backgrounds
-					'base-200': '#262a33', // Slightly lighter for contrast
-					'base-300': '#333841', // Dark but not black
-					'base-content': '#d8dee9', // Light gray for readability
-					info: '#4ca1e0', // Matching info color
-					'info-content': '#ffffff', // White for clarity
-					success: '#7dc847', // Matching success green
-					'success-content': '#ffffff', // White text for clarity
-					warning: '#f9a825', // Matching warm warning color
-					'warning-content': '#ffffff', // White for readability
-					error: '#e57373', // Softer red for errors
-					'error-content': '#ffffff'
+					primary: '#4b6a8a', // Muted blue tone for dark backgrounds
+					'primary-content': '#e0e0e0', // Light gray for readable text on primary
+					secondary: '#03466b', // Darker blue for harmony with primary
+					'secondary-content': '#e0e0e0', // Light gray for readability
+					accent: '#0a7fb9', // Calming bluish hue for accents
+					'accent-content': '#f4f4f4', // Light gray for clear text on accents
+					neutral: '#1c1c1c', // Dark neutral for backgrounds
+					'neutral-content': '#f4f4f4', // Light gray for contrast
+					'base-100': '#121212', // Very dark gray for the base background
+					'base-200': '#1e1e1e', // Slightly lighter dark gray
+					'base-300': '#2c2c2c', // Darker gray for contrast areas
+					'base-content': '#e0e0e0', // Light text for readability
+					info: '#4ca1e0', // Calming blue for information (same as light)
+					'info-content': '#f4f4f4', // Light gray for clarity
+					success: '#6ca63f', // Soft green for success on dark backgrounds
+					'success-content': '#f4f4f4', // Light gray for contrast
+					warning: '#e68a00', // Warmer orange for warning on dark backgrounds
+					'warning-content': '#f4f4f4', // Light gray for readability
+					error: '#cf6679', // Muted red for errors
+					'error-content': '#f4f4f4' // Light gray for readability
 				}
 			}
 		]
