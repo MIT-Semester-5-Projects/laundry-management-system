@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base{
+  @font-face{
+    font-family: Urbanist;
+    src: local('Urbanist'),
+         url('/static/webfonts/urbanist-latin-400-normal.woff2') format('woff2');
+  }
+}
+
+@layer base {
+
+:root {
+  /* Light theme */
+  --background: 0 0% 96%; /* base-100 */
+  --foreground: 0 0% 20%; /* base-content */
+  --card: 210 25% 94%; /* base-200 */
+  --card-foreground: 0 0% 20%; /* base-content */
+  --popover: 0 0% 96%; /* base-100 */
+  --popover-foreground: 0 0% 20%; /* base-content */
+  --primary: 206 40% 60%; /* primary */
+  --primary-foreground: 0 0% 100%; /* primary-content */
+  --secondary: 204 97% 32%; /* secondary */
+  --secondary-foreground: 0 0% 100%; /* secondary-content */
+  --muted: 0 0% 88%; /* neutral */
+  --muted-foreground: 0 0% 17%; /* neutral-content */
+  --accent: 202 85% 55%; /* accent */
+  --accent-foreground: 0 0% 100%; /* accent-content */
+  --destructive: 0 69% 69%; /* error */
+  --destructive-foreground: 0 0% 100%; /* error-content */
+  --border: 0 0% 88%; /* neutral */
+  --input: 210 25% 94%; /* base-200 */
+  --ring: 206 40% 60%; /* primary */
+  --radius: 0.75rem;
+}
+
+.dark {
+  /* Dark theme */
+  --background: 210 10% 7%; /* base-100 */
+  --foreground: 0 0% 88%; /* base-content */
+  --card: 210 10% 12%; /* base-200 */
+  --card-foreground: 0 0% 88%; /* base-content */
+  --popover: 210 10% 7%; /* base-100 */
+  --popover-foreground: 0 0% 88%; /* base-content */
+  --primary: 210 30% 30%; /* primary */
+  --primary-foreground: 0 0% 88%; /* primary-content */
+  --secondary: 210 95% 18%; /* secondary */
+  --secondary-foreground: 0 0% 88%; /* secondary-content */
+  --muted: 0 0% 11%; /* neutral */
+  --muted-foreground: 0 0% 96%; /* neutral-content */
+  --accent: 202 85% 30%; /* accent */
+  --accent-foreground: 0 0% 96%; /* accent-content */
+  --destructive: 0 49% 56%; /* error */
+  --destructive-foreground: 0 0% 96%; /* error-content */
+  --border: 210 10% 12%; /* border */
+  --input: 210 10% 12%; /* input */
+  --ring: 210 30% 30%; /* primary */
+  --radius: 0.75rem;
+}
+}
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
