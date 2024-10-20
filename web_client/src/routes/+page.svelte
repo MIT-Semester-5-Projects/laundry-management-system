@@ -3,33 +3,53 @@
 	import { Input } from '$lib/components/ui/input/index';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { enhance } from '$app/forms';
-	import { redirect } from '@sveltejs/kit';
+	import { goto } from '$app/navigation';
+	import type { ActionResult } from '@sveltejs/kit';
+
+	interface FormEvent {
+		data: ActionResult;
+		form: HTMLFormElement;
+		update: () => void;
+	}
 
 	let errorMsg: string = '';
 	let username: string = '';
 	let password: string = '';
 	let wrongdeets: boolean = false;
-	let role: string = '';
-
+	const url = 'localhost:8000/user/login';
 	// Enhanced form submission
-	async function onSubmit({ data, form, update }: any) {
-		wrongdeets = false; // Reset wrongdeets on submission
-		errorMsg = '';
-
-		if (data?.error) {
-			wrongdeets = true;
-			errorMsg = data.error;
-			password = ''; // Clear password field on error
-		} else {
-			role = data.role; // Assume the server returns user role
-			if (role === 'student') {
-				throw redirect(303, '/user/student'); // Redirect to student dashboard
-			} else if (role === 'admin') {
-				throw redirect(303, '/user/admin'); // Redirect to admin dashboard
+	async function onSubmit({ data, form, update }: FormEvent) {
+		const role: string | null = form.getAttribute('data-role');
+		const formData = new FormData(form);
+		formData.append('role', role ?? '');
+		try {
+			const response = await fetch(url, {
+				method: 'POST',
+				body: formData
+			});
+			if (response.ok) {
+				const result = await response.json();
+				if (result.success) {
+					if (role == 'admin') {
+						goto('/user/admin');
+					} else {
+						goto('/user/student');
+					}
+				} else {
+					wrongdeets = true;
+					errorMsg = result.error || 'Bad Credentials';
+					password = '';
+				}
 			} else {
-				errorMsg = 'Unknown user role'; // Handle unexpected role
+				wrongdeets = true;
+				errorMsg = 'Server Error. Please Try Again Later';
 			}
+		} catch (error) {
+			wrongdeets = true;
+			errorMsg = 'Network Error. Please Check Your Connection';
+			console.log(error);
 		}
+		update();
 	}
 </script>
 
@@ -46,11 +66,11 @@
 					<Dialog.Title>Admin Login</Dialog.Title>
 					<Dialog.Description>Login As Admin To View Analytics</Dialog.Description>
 				</Dialog.Header>
-				<form action="/user/login" method="post" use:enhance={onSubmit}>
+				<form method="POST" use:enhance={onSubmit} data-role="admin">
 					<div class="grid gap-4 py-4">
 						<div class="grid grid-cols-3 items-center gap-4">
 							<Input
-								id="username"
+								name="username"
 								bind:value={username}
 								placeholder="Enter Username..."
 								class="col-span-3"
@@ -60,7 +80,7 @@
 							<Input
 								type="password"
 								placeholder="Enter Password..."
-								id="password"
+								name="password"
 								class="col-span-3"
 								bind:value={password}
 							/>
@@ -82,11 +102,11 @@
 					<Dialog.Title>Student Login</Dialog.Title>
 					<Dialog.Description>Login As Student To View Status Updates</Dialog.Description>
 				</Dialog.Header>
-				<form action="/user/login" method="post" use:enhance={onSubmit}>
+				<form method="POST" use:enhance={onSubmit} data-role="student">
 					<div class="grid gap-4 py-4">
 						<div class="grid grid-cols-3 items-center gap-4">
 							<Input
-								id="username"
+								name="username"
 								bind:value={username}
 								placeholder="Enter Registration No..."
 								class="col-span-3"
@@ -96,7 +116,7 @@
 							<Input
 								type="password"
 								placeholder="Enter Password..."
-								id="password"
+								name="password"
 								class="col-span-3"
 								bind:value={password}
 							/>
