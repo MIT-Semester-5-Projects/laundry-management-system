@@ -1,6 +1,8 @@
 import mariadb
+import mysql
 import os
 import dotenv
+
 
 dotenv.load_dotenv()
 
@@ -17,8 +19,13 @@ db_config = {
 
 try:
     # Establish connection
-    conn = mariadb.connect(**db_config)
-    print("Connection to the database established successfully!")
+    if os.name == "posix":
+        conn = mariadb.connect(**db_config)
+        print("Connection to the database established successfully!")
+    else:
+        conn = mysql.connector.connect(**db_config)
+        print("Connection to the database established successfully!")
+
 
     # Example operation
     cursor = conn.cursor()
