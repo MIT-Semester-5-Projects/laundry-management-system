@@ -1,3 +1,4 @@
 db_data/
 init-db.sql/
-server/server/__pycache__/
+server/__pycache__/
+server/.env
