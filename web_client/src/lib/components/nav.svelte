@@ -27,9 +27,13 @@
 			><img width="100px" src="/logo.png" alt="Quick Smart Wash - Caring For Second Skin" /></a
 		>
 	</div>
-	<ul class="flex space-x-4">
+	<ul class="flex items-center space-x-4">
 		<li>
-			<Button variant="link" class="text-2xl text-primary-foreground">Services</Button>
+			<a
+				href="/services"
+				class="rounded-sm p-1 text-2xl text-primary-foreground hover:bg-background hover:opacity-20"
+				>Services</a
+			>
 		</li>
 
 		<li>
@@ -43,7 +47,7 @@
 				size="icon"
 			>
 				<Sun
-					class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 fill-black transition-all dark:-rotate-90 dark:scale-0"
+					class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 fill-primary transition-all dark:-rotate-90 dark:scale-0"
 				/>
 				<Moon
 					class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 fill-white transition-all dark:rotate-0 dark:scale-100"
