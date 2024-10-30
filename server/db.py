@@ -9,7 +9,7 @@ DB_PASS = os.environ.get("DB_PASS")
 # Database connection parameters
 db_config = {
     "host": "127.0.0.1",
-    "port": 3353,   # change it to 3353 for Linux, 3306 for Windows
+    "port": 3306,
     "user": DB_USER,
     "password": DB_PASS,
     "database": "laundry_management",
