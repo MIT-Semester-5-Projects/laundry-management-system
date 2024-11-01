@@ -8,13 +8,14 @@ const buttonVariants = tv({
 		variant: {
 			default: 'bg-primary text-primary-foreground hover:bg-primary/90',
 			destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-			outline: 'border-input bg-background hover:bg-accent hover:text-accent-foreground border',
+			outline:
+				'border-input bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground ',
 			secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 text-2xl',
 			ghost: 'hover:bg-accent hover:text-accent-foreground',
 			link: 'text-primary underline-offset-4 hover:underline'
 		},
 		size: {
-			default: 'h-10 w-48 px-4 py-2',
+			default: 'h-12 rounded-3xl w-72 text-lg px-4 py-2',
 			sm: 'h-9 w-36 rounded-md px-3',
 			lg: 'h-11 w-64 rounded-md px-8',
 			icon: 'h-10 w-10'
