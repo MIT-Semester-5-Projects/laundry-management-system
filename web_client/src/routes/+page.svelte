@@ -1,45 +1,47 @@
 <script lang="ts">
-	//Transition Imports
-
-	import { fade, fly } from 'svelte/transition';
-	import { quadIn, sineIn } from 'svelte/easing';
-	//Component Imports
-
+	//Animation Imports
+	import { fly } from 'svelte/transition';
+	import { sineIn } from 'svelte/easing';
+	// Component Imports
+	import { StudentService } from '$lib/index';
 	import { Separator } from '$lib/components/ui/separator';
-
-	//Misc Imports
 	import { Mount } from '$lib/index';
 	import { Admin } from '$lib/index';
 	import { Student } from '$lib/index';
+	import { AdminService } from '$lib/index';
+	//Type Imports
 	import type { ActionData } from './$types';
-	// Exports
+	//Exports
 	export let form: ActionData;
+
+	//Scroll Animation
 </script>
 
 <Mount>
 	<div
-		class="relative flex h-2/5 w-3/4 flex-col items-center justify-start gap-y-2 rounded-2xl bg-secondary bg-opacity-50 backdrop-blur-sm"
-		in:fade={{ duration: 400, easing: quadIn }}
+		class="mx-auto mt-48 flex max-w-screen-md flex-col items-center justify-center gap-y-2 rounded-2xl bg-secondary bg-opacity-50 px-4 pb-4 pt-8 backdrop-blur-sm"
+		in:fly={{ y: 200, duration: 700, easing: sineIn }}
 	>
-		<p
-			class="pt-5 text-5xl font-bold text-primary-foreground"
-			in:fly={{ y: 100, delay: 400, duration: 500, easing: sineIn }}
-		>
-			Laundromate
-		</p>
-		<p
-			class="pt-5 text-2xl text-primary-foreground"
-			in:fly={{ y: 200, delay: 700, duration: 500, easing: quadIn }}
-		>
+		<p class="text-5xl font-bold text-primary-foreground">Laundromate</p>
+		<p class="pt-5 text-center text-2xl text-primary-foreground">
 			Laundry Made Easy, Updates Just a Click Away.
 		</p>
-		<div
-			class="absolute bottom-1/3 left-1/2 flex -translate-x-1/2 flex-row items-end justify-between space-x-4"
-			in:fly={{ y: 300, delay: 700, duration: 500, easing: quadIn }}
-		>
+		<div class="flex flex-row items-center justify-center space-x-4 pt-6">
 			<Admin {form} />
 			<Separator orientation="vertical" />
 			<Student {form} />
 		</div>
+	</div>
+	<div
+		class="mb-24 mt-48 rounded-xl p-1 backdrop-blur-xl"
+		transition:fly={{ x: -200, duration: 700, delay: 800, easing: sineIn }}
+	>
+		<p class="text-5xl font-semibold text-accent">
+			What We <span class="text-secondary">Offer</span>
+		</p>
+	</div>
+	<div class="flex flex-row items-center justify-center">
+		<StudentService />
+		<AdminService />
 	</div>
 </Mount>

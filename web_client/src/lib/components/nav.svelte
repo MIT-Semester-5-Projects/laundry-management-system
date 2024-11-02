@@ -21,22 +21,14 @@
 	}
 </script>
 
-<nav class="flex w-full items-center justify-between bg-primary">
-	<div>
+<nav class=" flex w-full flex-row items-center justify-center bg-primary">
+	<div class="items-center">
 		<a href="/"
 			><img width="100px" src="/logo.png" alt="Quick Smart Wash - Caring For Second Skin" /></a
 		>
 	</div>
-	<ul class="flex items-center space-x-4">
-		<li>
-			<a
-				href="/services"
-				class="rounded-sm p-1 text-2xl text-primary-foreground hover:bg-background hover:opacity-20"
-				>Services</a
-			>
-		</li>
-
-		<li>
+	<ul class="absolute right-0 flex space-x-4">
+		<li class="pr-5">
 			<Button
 				on:click={() => {
 					toggleMode();

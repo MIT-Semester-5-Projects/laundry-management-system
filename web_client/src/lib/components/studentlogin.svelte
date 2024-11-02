@@ -26,11 +26,11 @@
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>Admin</Dialog.Trigger>
+	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>Student</Dialog.Trigger>
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
-			<Dialog.Title>Admin Login</Dialog.Title>
-			<Dialog.Description>Enter Admin Details To Access Analytics</Dialog.Description>
+			<Dialog.Title>Student Login</Dialog.Title>
+			<Dialog.Description>Enter Student Details To Access Updates</Dialog.Description>
 		</Dialog.Header>
 		<form method="POST" use:enhance on:submit|preventDefault={handleFormResponse}>
 			<div class="grid gap-4 py-4">

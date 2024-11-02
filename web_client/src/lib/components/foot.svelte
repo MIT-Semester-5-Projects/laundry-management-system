@@ -1,4 +1,4 @@
-<footer class="flex h-28 min-w-full items-center justify-between bg-secondary">
+<footer class="sticky flex h-28 min-w-full items-center justify-between bg-secondary">
 	<div class="flex items-center justify-between">
 		<img src="/grayLogo.png" width="85px" alt="" />
 		<p class="text-accent">© Quick Smart Wash Pvt. Ltd. {new Date().getFullYear()}</p>

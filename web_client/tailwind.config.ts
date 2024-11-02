@@ -6,7 +6,7 @@ const config: Config = {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	safelist: ['dark'],
 	mode: 'jit',
-	purge: ['./src/**/*.html', './src/**/*.js', , './src/**/*.ts', './src/**/*.svelte'],
+	purge: ['./src/**/*.html', './src/**/*.js', './src/**/*.ts', './src/**/*.svelte'],
 	theme: {
 		container: {
 			center: true,
@@ -16,6 +16,28 @@ const config: Config = {
 			}
 		},
 		extend: {
+			keyframes: {
+				typing: {
+					'0%': {
+						width: '0%',
+						visibility: 'hidden'
+					},
+					'100%': {
+						width: '100%'
+					}
+				},
+				blink: {
+					'50%': {
+						borderColor: 'transparent'
+					},
+					'100%': {
+						borderColor: 'white'
+					}
+				}
+			},
+			animation: {
+				typing: 'typing 2s steps(20) infinite alternate, blink .7s infinite'
+			},
 			fontFamily: {
 				urbanist: ['Urbanist']
 			},
@@ -58,9 +80,6 @@ const config: Config = {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
-			},
-			fontFamily: {
-				sans: [...fontFamily.sans]
 			}
 		}
 	}
