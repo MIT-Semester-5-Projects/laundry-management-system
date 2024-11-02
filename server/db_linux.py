@@ -6,10 +6,10 @@ dotenv.load_dotenv()
 
 DB_USER = os.environ.get("DB_USER")
 DB_PASS = os.environ.get("DB_PASS")
-# Database connection parameters
+
 db_config = {
     "host": "127.0.0.1",
-    "port": 3354,   # 3353 for Linux, 3354 for Windows
+    "port": 3353, 
     "user": DB_USER,
     "password": DB_PASS,
     "database": "laundry_management",
@@ -18,11 +18,9 @@ db_config = {
 conn = None #Initialize variable
 
 try:
-    #Establish connection
     conn = mariadb.connect(**db_config)
     print("Connection to the database established successfully!")
 
-    # Example operation
     cursor = conn.cursor()
     cursor.execute("SHOW TABLES;")
     for table in cursor:
@@ -32,6 +30,5 @@ except mariadb.Error as e:
     print(f"Error connecting to MariaDB: {e}")
 
 finally:
-    # Close the connection
     if conn:
         conn.close()
