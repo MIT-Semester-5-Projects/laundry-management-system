@@ -11,6 +11,9 @@
 	import { Mount } from '$lib/index';
 	import { Admin } from '$lib/index';
 	import { Student } from '$lib/index';
+	import type { ActionData } from './$types';
+	// Exports
+	export let form: ActionData;
 </script>
 
 <Mount>
@@ -34,9 +37,9 @@
 			class="absolute bottom-1/3 left-1/2 flex -translate-x-1/2 flex-row items-end justify-between space-x-4"
 			in:fly={{ y: 300, delay: 700, duration: 500, easing: quadIn }}
 		>
-			<Admin />
+			<Admin {form} />
 			<Separator orientation="vertical" />
-			<Student />
+			<Student {form} />
 		</div>
 	</div>
 </Mount>

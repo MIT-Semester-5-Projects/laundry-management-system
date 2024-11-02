@@ -1,51 +1,68 @@
-import { fail, redirect } from '@sveltejs/kit';
+// Testing Server Responses
+async function mockAdminLogin(username: string, password: string, role: string) {
+	// Successful response mock
+	console.log(role);
+	if (username === 'admin_user' && password === 'correct_password' && role === 'Admin') {
+		return {
+			success: true,
+			user: {
+				user_id: 12345,
+				username: 'admin_user',
+				role: 'Admin'
+			}
+		};
+	}
+	// Failed response mock
+	return {
+		success: false,
+		message: 'Invalid username or password'
+	};
+}
+async function mockStudentLogin(username: string, password: string, role: string) {
+	// Successful response mock
+	console.log(role);
 
-export async function validateAdmin(username: string, password: string, role: string) {
+	if (username === '225890312' && password === 'correct_password' && role === 'Student') {
+		return {
+			success: true,
+			user: {
+				user_id: 12345,
+				username: '225890312',
+				role: 'Student'
+			}
+		};
+	}
+	// Failed response mock
+	return {
+		success: false,
+		message: 'Invalid username or password'
+	};
+}
+
+export async function validateAdmin(username: string, password: string) {
 	try {
-		const server_response = await fetch('http://localhost:8000/user/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/JSON'
-			},
-			body: JSON.stringify({ username, password, role })
-		});
-		if (!server_response.ok) {
-			throw new Error('Please Try Again Later');
-		}
-		const data = await server_response.json();
-
-		if (data.success) {
-			return redirect(302, '/user/admin');
+		const response = await mockAdminLogin(username, password, 'Admin');
+		if (response.success) {
+			return { redirectUrl: '/user/admin' };
 		} else {
-			return fail(400, { message: 'Bad Credentials', password: '' });
+			return { error: response.message };
 		}
 	} catch (error) {
-		console.error('Error While Logging In: ', error);
-		return fail(404, { message: error || 'Uh Oh! Server Error' });
+		console.error('Error while validating Admin: ', error);
+		return { error: 'Uh Oh! Server Error' };
 	}
 }
 
-export async function validateStudent(regNo: string, password: string, role: string) {
+export async function validateStudent(username: string, password: string) {
 	try {
-		const server_response = await fetch('http://localhost:8000/user/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/JSON'
-			},
-			body: JSON.stringify({ regNo, password, role })
-		});
-		if (!server_response.ok) {
-			throw new Error('Please Try Again Later');
-		}
-		const data = await server_response.json();
-
-		if (data.success) {
-			return redirect(302, '/user/student');
+		const response = await mockStudentLogin(username, password, 'Student');
+		if (response.success) {
+			return { redirectUrl: '/user/student' };
 		} else {
-			return fail(400, { message: 'Bad Credentials', password: '' });
+			return { error: response.message };
 		}
 	} catch (error) {
-		console.error('Error While Logging In: ', error);
-		return fail(404, { message: error || 'Uh Oh! Server Error' });
+		console.error('Error while validating Student: ', error);
+		return { error: 'Uh Oh! Server Error' };
 	}
 }

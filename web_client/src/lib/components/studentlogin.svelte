@@ -1,42 +1,47 @@
 <script lang="ts">
-	//Component Imports
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Input } from '$lib/components/ui/input/index';
 	import { Label } from '$lib/components/ui/label/index';
 	import { Button, buttonVariants } from '$lib/components/ui/button/index';
-	//Icon Imports
 	import User from 'lucide-svelte/icons/user';
 	import Lock from 'lucide-svelte/icons/lock';
 	import EyeOff from 'lucide-svelte/icons/eye-off';
 	import Eye from 'lucide-svelte/icons/eye';
-	//Misc Imports
 	import { enhance } from '$app/forms';
-	//Variable Declarations
-	let reg_no: string = '';
+	import type { ActionData } from '../../routes/$types';
+
+	let username: string = '';
 	let password: string = '';
 	let isVisible: boolean = false;
-	//Function Declarations
-	function toggleVisibility(): void {
+	export let form: ActionData;
+
+	function toggleVisibility() {
 		isVisible = !isVisible;
+	}
+	function handleFormResponse() {
+		if (form?.password === '') {
+			password = ''; // Clear password field if there's an error
+		}
 	}
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>Student</Dialog.Trigger>
+	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>Admin</Dialog.Trigger>
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
-			<Dialog.Title>Student Login</Dialog.Title>
-			<Dialog.Description>Enter Student Details To View Status Updates</Dialog.Description>
+			<Dialog.Title>Admin Login</Dialog.Title>
+			<Dialog.Description>Enter Admin Details To Access Analytics</Dialog.Description>
 		</Dialog.Header>
-		<form action="/" method="POST" use:enhance>
+		<form method="POST" use:enhance on:submit|preventDefault={handleFormResponse}>
 			<div class="grid gap-4 py-4">
+				<input type="hidden" name="role" value="Student" />
 				<div class="flex flex-row items-center justify-center">
-					<input type="hidden" id="role" value="Student" />
 					<Label for="user" class="px-2 text-right"><User /></Label>
 					<Input
 						id="user"
-						bind:value={reg_no}
-						placeholder="Enter Registration Number..."
+						name="username"
+						bind:value={username}
+						placeholder="Enter Username..."
 						class="col-span-3 border-accent"
 					/>
 				</div>
@@ -44,25 +49,16 @@
 			<div class="flex flex-row items-center justify-center">
 				<Label for="password" class="px-2 text-right"><Lock /></Label>
 				<div class="relative w-full">
-					{#if isVisible}
-						<Input
-							id="password"
-							placeholder="Enter Password.."
-							bind:value={password}
-							class="col-span-3 border-accent pr-10"
-						/>
-					{:else}
-						<Input
-							type="password"
-							id="password"
-							placeholder="Enter Password.."
-							bind:value={password}
-							class="col-span-3 border-accent pr-10"
-						/>
-					{/if}
-
+					<Input
+						type={isVisible ? 'text' : 'password'}
+						id="password"
+						name="password"
+						bind:value={password}
+						placeholder="Enter Password.."
+						class="col-span-3 border-accent pr-10"
+					/>
 					<button
-						on:click={toggleVisibility}
+						on:click|preventDefault={toggleVisibility}
 						type="button"
 						class="absolute inset-y-0 right-2 flex items-center text-secondary hover:text-accent"
 						tabindex="-1"
@@ -75,6 +71,7 @@
 					</button>
 				</div>
 			</div>
+			<p class="items-center pl-10 text-destructive">{form?.message ?? ''}</p>
 			<Dialog.Footer>
 				<Button class="mr-20 mt-2 w-1/2" type="submit">Login</Button>
 			</Dialog.Footer>

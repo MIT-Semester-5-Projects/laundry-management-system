@@ -1,40 +1,45 @@
-//Imports
-import { fail } from '@sveltejs/kit';
-import type { Actions, PageServerLoadEvent, RequestEvent } from './$types';
+// src/routes/+page.server.ts
 import { validateAdmin, validateStudent } from '$lib/server/validate_user';
-export const actions: Actions = {
-	default: action
-};
-function validateInput(input: string): boolean {
-	const pattern = /^2\d{8}$/;
-	return pattern.test(input);
-}
+import { fail, redirect } from '@sveltejs/kit';
+import type { RequestEvent } from './$types';
 
-async function action(event: RequestEvent) {
-	const formData = await event.request.formData();
-	const username: string = formData.get('username') as string;
-	const password: string = formData.get('password') as string;
-	const role: string = formData.get('role') as string;
-	if (username === '' || password === '') {
-		return fail(400, {
-			message: 'Empty Input Fields!!',
-			password: ''
-		});
+export const actions = {
+	default: async (event: RequestEvent) => {
+		const formData = await event.request.formData();
+		const username = formData.get('username') as string;
+		const password = formData.get('password') as string;
+		const role = formData.get('role') as string;
+
+		// Check for empty fields
+		if (!username || !password) {
+			return fail(400, { message: 'Empty Input Fields!!', password: '' });
+		}
+
+		// Validate Student input if role is Student
+		if (role === 'Student' && !validateInput(username)) {
+			return fail(400, { message: 'Invalid Registration No.', password: '' });
+		}
+
+		let result;
+		if (role === 'Admin') {
+			result = await validateAdmin(username, password);
+		} else if (role === 'Student') {
+			result = await validateStudent(username, password);
+		}
+
+		// Handle the result
+		if (result.redirectUrl) {
+			throw redirect(302, result.redirectUrl);
+		} else if (result.error) {
+			return fail(400, { message: result.error, password: '' });
+		}
+
+		return fail(500, { message: 'Unexpected error occurred.', password: '' });
 	}
-	if (role == 'Student' && !validateInput(username)) {
-		return fail(400, {
-			message: 'Incorrect Registration Number',
-			password: ''
-		});
-	}
-	if (role == 'Admin') {
-		validateAdmin(username, password, role);
-	} else if (role == 'Student') {
-		validateStudent(username, password, role);
-	} else {
-		return fail(400, {
-			message: 'Invalid Role',
-			password: ''
-		});
-	}
+};
+
+// Validation function for registration number
+function validateInput(input: string): boolean {
+	const pattern = /^2\d{8}$/; // Adjust based on your actual validation logic
+	return pattern.test(input);
 }
