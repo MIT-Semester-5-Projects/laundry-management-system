@@ -26,7 +26,9 @@ export const actions = {
 		} else if (role === 'Student') {
 			result = await validateStudent(username, password);
 		}
-
+		if (result == undefined) {
+			return fail(400, { message: 'Uh Oh, Our Systems Are Experiencing An Error', password: '' });
+		}
 		// Handle the result
 		if (result.redirectUrl) {
 			throw redirect(302, result.redirectUrl);

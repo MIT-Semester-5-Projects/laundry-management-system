@@ -36,11 +36,9 @@
 		class="mb-24 mt-48 rounded-xl p-1 backdrop-blur-xl"
 		transition:fly={{ x: -200, duration: 700, delay: 800, easing: sineIn }}
 	>
-		<p class="text-5xl font-semibold text-accent">
-			What We <span class="text-secondary">Offer</span>
-		</p>
+		<p class="text-5xl font-semibold text-accent">What We Offer</p>
 	</div>
-	<div class="flex flex-row items-center justify-center">
+	<div class="flex flex-row items-center justify-center backdrop-blur-lg" transition:fly={{}}>
 		<StudentService />
 		<AdminService />
 	</div>

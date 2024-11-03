@@ -1,20 +1,23 @@
 <script lang="ts">
+	//Component Imports
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Input } from '$lib/components/ui/input/index';
 	import { Label } from '$lib/components/ui/label/index';
 	import { Button, buttonVariants } from '$lib/components/ui/button/index';
+	//Icon Imports
 	import User from 'lucide-svelte/icons/user';
 	import Lock from 'lucide-svelte/icons/lock';
 	import EyeOff from 'lucide-svelte/icons/eye-off';
 	import Eye from 'lucide-svelte/icons/eye';
+	//Misc Imports
 	import { enhance } from '$app/forms';
 	import type { ActionData } from '../../routes/$types';
-
+	//Variable Declarations
 	let username: string = '';
 	let password: string = '';
 	let isVisible: boolean = false;
 	export let form: ActionData;
-
+	//Function Declarations
 	function toggleVisibility() {
 		isVisible = !isVisible;
 	}
@@ -71,7 +74,7 @@
 					</button>
 				</div>
 			</div>
-			<p class="items-center pl-10 text-destructive">{form?.message ?? ''}</p>
+			<p class="ml-12 text-red-700">{form?.message ?? ''}</p>
 			<Dialog.Footer>
 				<Button class="mr-20 mt-2 w-1/2" type="submit">Login</Button>
 			</Dialog.Footer>

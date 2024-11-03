@@ -7,10 +7,10 @@
 </script>
 
 <div
-	class="mb-16 flex w-3/4 max-w-screen-md flex-col items-center justify-center rounded-3xl pb-5 backdrop-blur-sm"
+	class="mb-16 flex w-3/4 max-w-screen-md flex-col items-center justify-center rounded-3xl pb-5"
 	transition:fly={{ x: -200, duration: 700, delay: 900, easing: sineIn }}
 >
-	<p class=" p-4 text-3xl font-bold text-accent">For Students</p>
+	<p class=" p-4 text-3xl font-bold text-blue-300">For Students</p>
 	<Carousel.Root class="relative w-3/4 self-center">
 		<Carousel.Content>
 			{#each Array(3) as _, i (i)}
