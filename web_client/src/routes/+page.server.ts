@@ -1,6 +1,7 @@
 // src/routes/+page.server.ts
-import { validateAdmin, validateStudent } from '$lib/server/validate_user';
-import { fail, redirect } from '@sveltejs/kit';
+import { validateUser, type LoginResponse } from '$lib/server/validate_user';
+import { fail, redirect, type Cookies } from '@sveltejs/kit';
+import { sessionStore } from '$lib/store/sessionStore';
 import type { RequestEvent } from './$types';
 
 // Validation function for registration number
@@ -9,8 +10,15 @@ function validateInput(input: string): boolean {
 	return pattern.test(input);
 }
 
+function createSession(cookie: Cookies, response: LoginResponse) {
+	const maxAge = 1800000;
+	if (response.success && response.data?.token) {
+		cookie.set('token', response.data?.token, { maxAge, path: '/' });
+	}
+}
+
 export const actions = {
-	default: async (event: RequestEvent) => {
+	default: async (event: RequestEvent, cookie: Cookies) => {
 		const formData = await event.request.formData();
 		const username = formData.get('username') as string;
 		const password = formData.get('password') as string;
@@ -28,20 +36,17 @@ export const actions = {
 
 		let result;
 		if (role === 'Admin') {
-			result = await validateAdmin(username, password);
-		} else if (role === 'Student') {
-			result = await validateStudent(username, password);
+			result = await validateUser(username, password, role);
+			if (result == undefined) {
+				return fail(400, { message: 'Uh Oh, Our Systems Are Experiencing An Error', password: '' });
+			}
+			if ('error' in result) {
+				return fail(400, { message: result.error, password: '' });
+			} else if (result.success && result.data) {
+				createSession(cookie, result);
+				sessionStore.setToken(result.data.token, result.data.userRole);
+				throw redirect(302, '');
+			}
 		}
-		if (result == undefined) {
-			return fail(400, { message: 'Uh Oh, Our Systems Are Experiencing An Error', password: '' });
-		}
-		// Handle the result
-		if (result.redirectUrl) {
-			throw redirect(302, result.redirectUrl);
-		} else if (result.error) {
-			return fail(400, { message: result.error, password: '' });
-		}
-
-		return fail(500, { message: 'Unexpected error occurred.', password: '' });
 	}
 };

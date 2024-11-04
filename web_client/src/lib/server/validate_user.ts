@@ -1,18 +1,44 @@
 //Imports
-import { authToken, userRole } from '$lib/stores/auth';
 //Response Typing
-interface LoginResponse {
+export interface LoginResponse {
 	success: boolean;
 	message: string;
 	data?: {
 		userId: string;
 		username: string;
+		userRole: string;
 		token: string;
 	};
 }
 
-//// Testing Server Responses
-//async function mockAdminLogin(username: string, password: string, role: string) {
+export async function validateUser(username: string, password: string, role: string) {
+	try {
+		const response = await fetch('http://localhost:8000/user/login', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ username, password, role })
+		});
+
+		if (!response.ok) {
+			return { error: 'Failed to authenticate with server' };
+		}
+
+		const data = (await response.json()) as LoginResponse;
+
+		if (data.success && data.data) {
+			return data;
+		} else {
+			return { error: data.message };
+		}
+	} catch (error) {
+		console.error('Error while validating user details: ', error);
+		return { error: 'Server error' };
+	}
+}
+
+//// Testing Server Responses async function mockAdminLogin(username: string, password: string, role: string) {
 //	// Successful response mock
 //	console.log(role);
 //	if (username === 'admin_user' && password === 'correct_password' && role === 'Admin') {
@@ -51,56 +77,3 @@ interface LoginResponse {
 //		message: 'Invalid username or password'
 //	};
 //}
-
-export async function validateAdmin(username: string, password: string) {
-	const role = 'Admin';
-	try {
-		const response = await fetch('http://localhost:8000/user/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ username, password, role })
-		});
-
-		if (!response.ok) {
-			return { error: 'Failed to authenticate with server' };
-		}
-
-		const data = (await response.json()) as LoginResponse;
-
-		if (data.success) {
-			return { redirectUrl: '/user/admin' };
-		} else {
-			return { error: data.message };
-		}
-	} catch (error) {
-		console.error('Error while validating Admin: ', error);
-		return { error: 'Server error' };
-	}
-}
-export async function validateStudent(username: string, password: string) {
-	const role: string = 'Student';
-	try {
-		const server_response = await fetch('http://localhost:8000/user/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'applications/json'
-			},
-			body: JSON.stringify({ username, password, role })
-		});
-		if (!server_response.ok) {
-			return { error: 'Failed To Authenticate With Server' };
-		}
-		const response = (await server_response.json()) as LoginResponse;
-
-		if (response.success) {
-			return { redirectUrl: '/user/student' };
-		} else {
-			return { error: response.message };
-		}
-	} catch (error) {
-		console.error('Error while validating Student: ', error);
-		return { error: 'Uh Oh! Server Error' };
-	}
-}
