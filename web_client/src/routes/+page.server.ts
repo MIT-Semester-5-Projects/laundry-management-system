@@ -44,7 +44,7 @@ export const actions = {
 				return fail(400, { message: result.error, password: '' });
 			} else if (result.success && result.data) {
 				createSession(cookie, result);
-				sessionStore.setToken(result.data.token, result.data.userRole);
+				sessionStore.setToken(result.data.token, result.data.userRole, username);
 				throw redirect(302, '');
 			}
 		}

@@ -7,10 +7,10 @@
 	import { sessionStore } from '$lib/store/sessionStore';
 	import { onMount } from 'svelte';
 	let token: string | null = null;
-	let role: string | null = null;
+	let name: string | null = null;
 	const unsubscribe = sessionStore.subscribe((session) => {
 		token = session.token;
-		role = session.userRole;
+		name = session.userName;
 	});
 
 	onMount(() => {
@@ -47,6 +47,7 @@
 	</div>
 	<ul class="absolute right-0 flex space-x-4">
 		{#if token !== null}
+			<li>Welcome, {name}</li>
 			<li class=" pr-5">
 				<button
 					on:click={logout}
