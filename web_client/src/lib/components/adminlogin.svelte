@@ -75,8 +75,8 @@
 				</div>
 			</div>
 			<p class="ml-12 text-red-700">{form?.message ?? ''}</p>
-			<Dialog.Footer>
-				<Button class="mr-20 mt-2 w-1/2" type="submit">Login</Button>
+			<Dialog.Footer class="flex flex-col items-center justify-center">
+				<Button class="relative right-1/4 mt-2 w-1/2" type="submit">Login</Button>
 			</Dialog.Footer>
 		</form>
 	</Dialog.Content>

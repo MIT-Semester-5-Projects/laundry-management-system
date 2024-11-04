@@ -71,7 +71,7 @@
 					</button>
 				</div>
 			</div>
-			<p class="items-center pl-10 text-destructive">{form?.message ?? ''}</p>
+			<p class="items-center pl-10 text-red-700">{form?.message ?? ''}</p>
 			<Dialog.Footer>
 				<Button class="mr-20 mt-2 w-1/2" type="submit">Login</Button>
 			</Dialog.Footer>

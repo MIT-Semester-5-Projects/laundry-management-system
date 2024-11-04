@@ -3,6 +3,12 @@ import { validateAdmin, validateStudent } from '$lib/server/validate_user';
 import { fail, redirect } from '@sveltejs/kit';
 import type { RequestEvent } from './$types';
 
+// Validation function for registration number
+function validateInput(input: string): boolean {
+	const pattern = /^2\d{8}$/; // Adjust based on your actual validation logic
+	return pattern.test(input);
+}
+
 export const actions = {
 	default: async (event: RequestEvent) => {
 		const formData = await event.request.formData();
@@ -39,9 +45,3 @@ export const actions = {
 		return fail(500, { message: 'Unexpected error occurred.', password: '' });
 	}
 };
-
-// Validation function for registration number
-function validateInput(input: string): boolean {
-	const pattern = /^2\d{8}$/; // Adjust based on your actual validation logic
-	return pattern.test(input);
-}

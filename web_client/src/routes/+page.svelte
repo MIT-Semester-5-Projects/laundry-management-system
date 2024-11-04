@@ -38,7 +38,10 @@
 	>
 		<p class="text-5xl font-semibold text-accent">What We Offer</p>
 	</div>
-	<div class="flex flex-row items-center justify-center backdrop-blur-lg" transition:fly={{}}>
+	<div
+		class="flex flex-row items-center justify-center backdrop-blur-lg"
+		transition:fly={{ x: -200, duration: 700, delay: 700, easing: sineIn }}
+	>
 		<StudentService />
 		<AdminService />
 	</div>
