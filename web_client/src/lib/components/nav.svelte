@@ -4,6 +4,24 @@
 	import Moon from 'lucide-svelte/icons/moon';
 	import { toggleMode } from 'mode-watcher';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { sessionStore } from '$lib/store/sessionStore';
+	import { onMount } from 'svelte';
+	let token: string | null = null;
+	let role: string | null = null;
+	const unsubscribe = sessionStore.subscribe((session) => {
+		token = session.token;
+		role = session.userRole;
+	});
+
+	onMount(() => {
+		return () => {
+			unsubscribe();
+		};
+	});
+	function logout() {
+		sessionStore.clearSession();
+		document.cookie = 'token=; Max-Age=0; path=/'; // Clear token cookie
+	}
 
 	function toggleBG() {
 		const main = document.querySelector('main') as HTMLElement | null;
@@ -28,6 +46,16 @@
 		>
 	</div>
 	<ul class="absolute right-0 flex space-x-4">
+		{#if token !== null}
+			<li class=" pr-5">
+				<button
+					on:click={logout}
+					class="flex flex-row items-center gap-x-2 rounded-2xl bg-secondary p-3 text-primary-foreground hover:bg-accent"
+					>Log Out <img src="/logout.png" width="20px" alt="Click Here To Log Out" /></button
+				>
+			</li>
+		{/if}
+
 		<li class="pr-5">
 			<Button
 				on:click={() => {
