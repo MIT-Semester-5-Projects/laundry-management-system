@@ -1,6 +1,6 @@
 // src/routes/+page.server.ts
 import { validateUser, type LoginResponse } from '$lib/server/validate_user';
-import { fail, redirect, type Cookies } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { sessionStore } from '$lib/store/sessionStore';
 import type { RequestEvent } from './$types';
 
@@ -10,15 +10,15 @@ function validateInput(input: string): boolean {
 	return pattern.test(input);
 }
 
-function createSession(cookie: Cookies, response: LoginResponse) {
+function createSession(event: RequestEvent, response: LoginResponse) {
 	const maxAge = 1800000;
 	if (response.success && response.data?.token) {
-		cookie.set('token', response.data?.token, { maxAge, path: '/' });
+		event.cookies.set('token', response.data.token, { maxAge, path: '/' });
 	}
 }
 
 export const actions = {
-	default: async (event: RequestEvent, cookie: Cookies) => {
+	default: async (event: RequestEvent) => {
 		const formData = await event.request.formData();
 		const username = formData.get('username') as string;
 		const password = formData.get('password') as string;
@@ -34,18 +34,19 @@ export const actions = {
 			return fail(400, { message: 'Invalid Registration No.', password: '' });
 		}
 
-		let result;
-		if (role === 'Admin') {
-			result = await validateUser(username, password, role);
-			if (result == undefined) {
-				return fail(400, { message: 'Uh Oh, Our Systems Are Experiencing An Error', password: '' });
-			}
-			if ('error' in result) {
-				return fail(400, { message: result.error, password: '' });
-			} else if (result.success && result.data) {
-				createSession(cookie, result);
-				sessionStore.setToken(result.data.token, result.data.userRole, username);
-				throw redirect(302, '');
+		const result = await validateUser(username, password, role);
+		if (result == undefined) {
+			return fail(400, { message: 'Uh Oh, Our Systems Are Experiencing An Error', password: '' });
+		}
+		if ('error' in result) {
+			return fail(400, { message: result.error, password: '' });
+		} else if (result.success && result.data) {
+			createSession(event, result);
+			sessionStore.setToken(result.data.token, result.data.userRole, username);
+			if (role === 'Student') {
+				throw redirect(302, '/user/student');
+			} else if (role === 'Admin') {
+				throw redirect(302, '/user/admin');
 			}
 		}
 	}

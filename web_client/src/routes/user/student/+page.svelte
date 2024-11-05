@@ -1,12 +1,34 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	//Variable Declarations
-	export let inProgress: boolean = true;
-	export let isReady: boolean = false;
-	export let isCollected: boolean = false;
-	export let isNone: boolean = false;
-	export let date: string = '10/05/2024';
 	let noCycles = 30;
+
+	export let inProgress: boolean = false;
+	export let isReady: boolean = false;
+	export let isCollected: boolean = true;
+	export let isNone: boolean = true;
+	if (inProgress) {
+		isReady = false;
+		isCollected = false;
+		isNone = false;
+	} else if (isReady) {
+		inProgress = false;
+		isCollected = false;
+		isNone = false;
+	} else if (isCollected) {
+		isReady = false;
+		isNone = false;
+		inProgress = false;
+	} else if (isNone) {
+		inProgress = false;
+		isReady = false;
+		isCollected = false;
+	}
+
+	export let date: string = '10/05/2024';
+	if (isReady) {
+		noCycles -= 1;
+	}
 </script>
 
 <div class="flex h-full w-3/4 flex-col items-center gap-y-4">

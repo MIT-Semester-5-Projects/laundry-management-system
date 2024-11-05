@@ -1,5 +1,4 @@
-//Imports
-//Response Typing
+// Response Typing
 export interface LoginResponse {
 	success: boolean;
 	message: string;
@@ -11,26 +10,28 @@ export interface LoginResponse {
 	};
 }
 
-export async function validateUser(username: string, password: string, role: string) {
+export async function validateUser(
+	username: string,
+	password: string,
+	role: string
+): Promise<LoginResponse | { error: string }> {
 	try {
-		const response = await fetch('http://localhost:8000/user/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ username, password, role })
-		});
+		// Use mock functions instead of real fetch call
+		let response: LoginResponse;
+		if (role === 'Admin') {
+			response = await mockAdminLogin(username, password, role); // Ensure async handling
+		} else {
+			response = await mockStudentLogin(username, password, role); // Ensure async handling
+		}
 
-		if (!response.ok) {
+		if (!response.success) {
 			return { error: 'Failed to authenticate with server' };
 		}
 
-		const data = (await response.json()) as LoginResponse;
-
-		if (data.success && data.data) {
-			return data;
+		if (response.success && response.data) {
+			return response;
 		} else {
-			return { error: data.message };
+			return { error: response.message };
 		}
 	} catch (error) {
 		console.error('Error while validating user details: ', error);
@@ -38,42 +39,50 @@ export async function validateUser(username: string, password: string, role: str
 	}
 }
 
-//// Testing Server Responses async function mockAdminLogin(username: string, password: string, role: string) {
-//	// Successful response mock
-//	console.log(role);
-//	if (username === 'admin_user' && password === 'correct_password' && role === 'Admin') {
-//		return {
-//			success: true,
-//			user: {
-//				user_id: 12345,
-//				username: 'admin_user',
-//				role: 'Admin'
-//			}
-//		};
-//	}
-//	// Failed response mock
-//	return {
-//		success: false,
-//		message: 'Invalid username or password'
-//	};
-//}
-//async function mockStudentLogin(username: string, password: string, role: string) {
-//	// Successful response mock
-//	console.log(role);
-//
-//	if (username === '225890312' && password === 'correct_password' && role === 'Student') {
-//		return {
-//			success: true,
-//			user: {
-//				user_id: 12345,
-//				username: '225890312',
-//				role: 'Student'
-//			}
-//		};
-//	}
-//	// Failed response mock
-//	return {
-//		success: false,
-//		message: 'Invalid username or password'
-//	};
-//}
+// Mock Admin Login
+function mockAdminLogin(username: string, password: string, role: string): Promise<LoginResponse> {
+	// Successful response mock
+	if (username === 'Sudeep' && password === 'bruh' && role === 'Admin') {
+		return Promise.resolve({
+			success: true,
+			message: 'Successfully Authenticated',
+			data: {
+				userId: '12',
+				username: 'Sudeep',
+				userRole: 'Admin',
+				token: '1319O9we8r9weuawdfansdf12.129318203jdlfas'
+			}
+		});
+	}
+	// Failed response mock
+	return Promise.resolve({
+		success: false,
+		message: 'Invalid username or password'
+	});
+}
+
+// Mock Student Login
+function mockStudentLogin(
+	username: string,
+	password: string,
+	role: string
+): Promise<LoginResponse> {
+	// Successful response mock
+	if (username === '225890312' && password === 'svelte' && role === 'Student') {
+		return Promise.resolve({
+			success: true,
+			message: 'Successfully Authenticated',
+			data: {
+				userId: '12',
+				username: 'Nived',
+				userRole: 'Student',
+				token: '1249dfalsdkfjaaskdfj'
+			}
+		});
+	}
+	// Failed response mock
+	return Promise.resolve({
+		success: false,
+		message: 'Invalid username or password'
+	});
+}
