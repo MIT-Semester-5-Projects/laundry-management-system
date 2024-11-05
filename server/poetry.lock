@@ -399,6 +399,21 @@ http3 = ["aioquic"]
 test = ["bandit", "beautifulsoup4", "chardet (==3.*)", "coverage", "docutils", "mypy", "pygments", "pytest (>=8.2.2)", "pytest-benchmark", "pytest-sanic", "ruff", "sanic-testing (>=23.6.0)", "slotscheck (>=0.8.0,<1)", "types-ujson", "uvicorn"]
 
 [[package]]
+name = "sanic-cors"
+version = "2.2.0"
+description = "A Sanic extension adding a decorator for CORS support. Based on flask-cors by Cory Dolphin."
+optional = false
+python-versions = "*"
+files = [
+    {file = "Sanic-Cors-2.2.0.tar.gz", hash = "sha256:f8d7515da4c8b837871d422c66314c4b5704396a78894b59c50e26aa72a95873"},
+    {file = "Sanic_Cors-2.2.0-py2.py3-none-any.whl", hash = "sha256:c3b133ff1f0bb609a53db35f727f5c371dc4ebeb6be4cc2c37c19dd8b9301115"},
+]
+
+[package.dependencies]
+packaging = ">=21.3"
+sanic = ">=21.9.3"
+
+[[package]]
 name = "sanic-ext"
 version = "23.12.0"
 description = "Extend your Sanic installation with some core functionality."
@@ -708,4 +723,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "62e7a0108937b0d7b929f145e2951e92935c4e24d404a808226f69c24ccee5bc"
+content-hash = "0a00c463e7e2a1da67b8a15fcb5d220b0ae53593d2c87f9735c9b36ac0f5499a"

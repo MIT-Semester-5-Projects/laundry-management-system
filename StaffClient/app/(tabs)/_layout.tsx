@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function TabLayout() {
@@ -19,13 +20,16 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="collect"
+        name="Collect"
         options={{
           title: "Collect",
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons name="qr-code-scanner" size={24} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="wash"
+        name="Wash"
         options={{
           title: "Wash",
           tabBarIcon: ({ color }) => (
@@ -38,11 +42,24 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="ready"
+        name="Ready"
         options={{
           title: "Ready",
           tabBarIcon: ({ color }) => (
             <Ionicons name="checkmark-done" size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Delivered"
+        options={{
+          title: "Delivered",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name="truck-delivery"
+              size={24}
+              color={color}
+            />
           ),
         }}
       />

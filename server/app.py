@@ -1,12 +1,14 @@
 from sanic import Sanic
 from db_linux import db_config
 import mariadb
+from sanic_cors import CORS
 
 # from sanic_ext import Extend
 from .api import api
 
 app = Sanic("LaundryManagementSystem")
 app.blueprint(api)
+CORS(app)
 
 
 conn = None
@@ -16,6 +18,7 @@ conn = None
 async def load_db(app):
     try:
         conn = mariadb.connect(**db_config)
+        app.ctx.connection = conn
         print("Connection to the database established successfully!")
         app.ctx.cursor = conn.cursor()
     except mariadb.Error as e:

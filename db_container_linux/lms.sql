@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS `laundry` (
   `status` VARCHAR(10) NOT NULL COMMENT 'Collected->Processing->Ready->Delivered',
   `weight` DECIMAL(4, 1) NOT NULL DEFAULT 0,
   `pieces` INTEGER NOT NULL DEFAULT 0,
-  `date` DATETIME NOT NULL,
+  `date_received` DATETIME NOT NULL,
+  `date_delivered` DATETIME NOT NULL,
   FOREIGN KEY (`laundry_id`) REFERENCES `student_data`(`laundry_id`) ON DELETE CASCADE
 );
 

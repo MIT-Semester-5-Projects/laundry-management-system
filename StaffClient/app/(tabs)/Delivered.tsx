@@ -1,7 +1,16 @@
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useEffect, useState } from "react";
-import { Button, StyleSheet, Text, View, Dimensions } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Dimensions,
+} from "react-native";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
+const SERVER_URL = process.env.EXPO_PUBLIC_SERVER_URL;
 const { width } = Dimensions.get("window");
 
 async function sendId(url = "", data = {}) {
@@ -16,37 +25,45 @@ async function sendId(url = "", data = {}) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return await response.json();
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      return await response.json();
+    } else {
+      const textResponse = await response.text();
+      console.log("Non-JSON response:", textResponse);
+      return textResponse;
+    }
   } catch (error) {
     console.error("Error sending ID:", error);
   }
 }
 
-export default function CollectScreen() {
+export default function DeliveredScreen() {
   const [enableScanner, setEnableScanner] = useState(false);
   const [id, setId] = useState("0");
-
-  // Get camera permission once on component mount
   const [permission, requestPermission] = useCameraPermissions();
 
-  // Handle barcode scanning
   const handleBarcodeScanned = ({ data }) => {
     if (enableScanner && data.length === 32) {
-      setEnableScanner(false); // Disable the scanner after a successful scan
-      setId(data); // Store scanned ID
+      setEnableScanner(false);
+      setId(data);
+      setTimeout(() => setEnableScanner(true), 2000);
     }
   };
 
-  // Effect to send ID to backend once scanned
   useEffect(() => {
     if (id !== "0") {
-      sendId("http://110.29.92.56:3504/laundry/status/collected", {
+      const response = {
         laundry_id: id,
-      });
+        timestamp: new Date().toISOString(),
+      };
+      sendId(`${SERVER_URL}/laundry/status/delivered`, response);
+
+      console.log(`${SERVER_URL}/laundry/status/delivered`);
+      console.log(response);
     }
   }, [id]);
 
-  // Check and request camera permission
   if (!permission) {
     return <View />;
   }
@@ -73,9 +90,10 @@ export default function CollectScreen() {
 
       <Button
         color="#8db7e3"
-        title="Scan"
-        onPress={() => setEnableScanner(true)}
+        title="Deliver"
+        onPress={() => setEnableScanner((prev) => !prev)}
       />
+
       <Text style={styles.idText}>Scanned ID: {id}</Text>
     </View>
   );
