@@ -9,6 +9,17 @@ from sanic.request import Request
 
 auth = Blueprint("auth")
 
+# export interface LoginResponse {
+# 	success: boolean;
+# 	message: string;
+# 	data?: {
+# 		userId: string;
+# 		username: string;
+# 		userRole: string;
+# 		token: string;
+# 	};
+# }
+
 
 def check_token(request):
     if not request.token:

@@ -45,7 +45,7 @@ export async function fetchStudentDetails() {
 	}
 
 	try {
-		const response = await fetch('http://localhost:8000/laundry/details', {
+		const response = await fetch('http://localhost:3504/laundry/status', {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${token}`, // Template literal for token
@@ -88,7 +88,7 @@ export async function fetchAnalytics() {
 	}
 
 	try {
-		const response = await fetch('http://localhost:8000/laundry/Analytics', {
+		const response = await fetch('http://localhost:3504/laundry/analytics', {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${token}`, // Template literal for token
