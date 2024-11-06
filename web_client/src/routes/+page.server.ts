@@ -33,14 +33,17 @@ export const actions = {
 		}
 
 		const result = await validateUser(username, password, role);
-		if (result == undefined) {
-			return fail(400, { message: 'Uh Oh, Our Systems Are Experiencing An Error', password: '' });
-		}
-		if (role === 'Student') {
-			createSession(result.token);
-			throw redirect(302, '/user/student');
-		} else if (role === 'Admin') {
-			throw redirect(302, '/user/admin');
+		if (typeof result == 'object' && 'message' in result) {
+			return fail(400, { message: result.message, password: '' });
+		} else if (typeof result == 'string') {
+			createSession(event, result);
+			if (role === 'Student') {
+				sessionStore.setToken(result, role, username);
+				throw redirect(302, '/user/student');
+			} else if (role === 'Admin') {
+				sessionStore.setToken(result, role, username);
+				throw redirect(302, '/user/admin');
+			}
 		}
 	}
 };
