@@ -1,22 +1,12 @@
+import { fail } from '@sveltejs/kit';
 // Response Typing
 export interface LoginResponse {
-	success: boolean;
-	message: string;
-	data?: {
-		userId: string;
-		userName: string;
-		userRole: string;
-		// token: string;
-	};
+	token: string;
 }
 
-export async function validateUser(
-	userName: string,
-	password: string,
-	role: string
-): Promise<LoginResponse | { error: string }> {
+export async function validateUser(userName: string, password: string, role: string) {
 	try {
-		// Use mock functions instead of real fetch call
+		// Perform fetch call and await response
 		const response = await fetch('http://localhost:3504/auth', {
 			method: 'POST',
 			headers: {
@@ -24,8 +14,18 @@ export async function validateUser(
 			},
 			body: JSON.stringify({ userName, password, role })
 		});
+
+		// Check if response is ok (status 200-299)
+		if (!response.ok) {
+			return fail(400, { message: 'Failed to authenticate with server' });
+		}
+		// Parse JSON response
+		const json_response: LoginResponse = await response.json();
+		const token: string = json_response.token;
+		return token;
+		// If the response contains success and it's true, return data
 	} catch (error) {
-		console.error('Error while validating user details: ', error);
-		return { error: 'Server error' };
+		console.error('Error while validating user details:', error);
+		return fail(500, { message: 'Server error' });
 	}
 }

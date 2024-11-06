@@ -43,6 +43,7 @@
 	"type": "module",
 	"dependencies": {
 		"@types/jsonwebtoken": "^9.0.7",
+		"jwt-decode": "^4.0.0",
 		"mode-watcher": "^0.4.1"
 	}
 }

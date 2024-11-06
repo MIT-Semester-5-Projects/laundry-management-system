@@ -10,11 +10,9 @@ function validateInput(input: string): boolean {
 	return pattern.test(input);
 }
 
-function createSession(event: RequestEvent, response: LoginResponse) {
-	const maxAge = 1800000;
-	if (response.success && response.data?.token) {
-		event.cookies.set('token', response.data.token, { maxAge, path: '/' });
-	}
+function createSession(event: RequestEvent, token: string) {
+	const maxAge = 60 * 60 * 1000;
+	event.cookies.set('token', token, { maxAge, path: '/' });
 }
 
 export const actions = {
@@ -38,16 +36,11 @@ export const actions = {
 		if (result == undefined) {
 			return fail(400, { message: 'Uh Oh, Our Systems Are Experiencing An Error', password: '' });
 		}
-		if ('error' in result) {
-			return fail(400, { message: result.error, password: '' });
-		} else if (result.success && result.data) {
-			createSession(event, result);
-			sessionStore.setToken(result.data.token, result.data.userRole, username);
-			if (role === 'Student') {
-				throw redirect(302, '/user/student');
-			} else if (role === 'Admin') {
-				throw redirect(302, '/user/admin');
-			}
+		if (role === 'Student') {
+			createSession(result.token);
+			throw redirect(302, '/user/student');
+		} else if (role === 'Admin') {
+			throw redirect(302, '/user/admin');
 		}
 	}
 };

@@ -1,9 +1,9 @@
-import { sessionStore } from '$lib/store/sessionStore';
 import { fail } from '@sveltejs/kit';
-
+import { getSessionToken } from './get_token';
 export interface StudentDetails {
 	success: boolean;
-	data: {
+	message?: string;
+	data?: {
 		date_received: string;
 		date_collected: string;
 		remaining_cycles: number;
@@ -11,107 +11,33 @@ export interface StudentDetails {
 	};
 }
 
-export interface Analytics {
-	success: boolean;
-	data: {
-		daily: {
-			date: string;
-			noOfBags: number;
-		};
-		weekly: {
-			week: string;
-			noOfBags: number;
-		};
-		stats: {
-			avgTimeTaken: number;
-			avgNoOfBags: number;
-			DaysOperating: number;
-		};
-	};
-}
-
 export async function fetchStudentDetails() {
-	let token: string | null = null;
-
-	// Subscribe to sessionStore to get the token
-	const unsubscribe = sessionStore.subscribe((session) => {
-		token = session.token;
-	});
-	unsubscribe();
-
-	if (!token) {
-		// Return an error if token is missing
-		return fail(401, { message: 'Unauthorized: No token provided' });
+	const userToken: string | null = getSessionToken();
+	if (!userToken) {
+		return fail(400, { message: 'Not Authorized' });
 	}
-
 	try {
 		const response = await fetch('http://localhost:3504/laundry/status', {
 			method: 'GET',
 			headers: {
-				Authorization: `Bearer ${token}`, // Template literal for token
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${userToken}`
 			}
 		});
-
-		// Check if the response is OK
-		if (!response.ok) {
-			return fail(response.status, { message: 'Error Fetching Details' });
+		if (!response) {
+			return fail(500, { message: 'Unable to communicate with server' });
 		}
-
-		// Parse the JSON response
-		const details = (await response.json()) as StudentDetails;
-
-		// Return data if successful, else fail
-		if (details.success) {
-			return details.data;
+		if (!response.ok) {
+			return { success: false, message: 'Failed To Fetch Student Details' };
+		}
+		const data: StudentDetails = await response.json();
+		if (!data.success) {
+			return { success: false, message: data.message };
 		} else {
-			return fail(400, { message: 'Error Fetching Details' });
+			return data;
 		}
 	} catch (error) {
-		console.error('Error fetching student details:', error);
-		return fail(500, { message: 'Internal Server Error' });
-	}
-}
-
-export async function fetchAnalytics() {
-	let token: string | null = null;
-
-	// Subscribe to sessionStore to get the token
-	const unsubscribe = sessionStore.subscribe((session) => {
-		token = session.token;
-	});
-	unsubscribe();
-
-	if (!token) {
-		// Return an error if token is missing
-		return fail(401, { message: 'Unauthorized: No token provided' });
-	}
-
-	try {
-		const response = await fetch('http://localhost:3504/laundry/analytics', {
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${token}`, // Template literal for token
-				'Content-Type': 'application/json'
-			}
-		});
-
-		// Check if the response is OK
-		if (!response.ok) {
-			return fail(response.status, { message: 'Error Fetching Details' });
-		}
-
-		// Parse the JSON response
-		const details = (await response.json()) as Analytics;
-
-		// Return data if successful, else fail
-		if (details.success) {
-			return details.data;
-		} else {
-			return fail(400, { message: 'Error Fetching Details' });
-		}
-	} catch (error) {
-		console.error('Error fetching Analytics:', error);
-		return fail(500, { message: 'Internal Server Error' });
+		console.log('Uh Oh, Unexpected Error');
+		return fail(500, { message: error || 'We are experiencing some difficulties, please wait' });
 	}
 }
