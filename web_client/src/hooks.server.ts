@@ -18,7 +18,7 @@ function getUserDetails(): Promise<string | undefined> {
 export const handle: Handle = async ({ event, resolve }) => {
 	//Route Protection
 	//const role: string | undefined = await getUserDetails();
-	const role: string = 'Admin';
+	const role: string | undefined = await getUserDetails();
 	if (event.url.pathname.startsWith('/user')) {
 		try {
 			if (!role) {
