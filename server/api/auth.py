@@ -1,6 +1,6 @@
 from functools import wraps
 import jwt
-from sanic import response, text
+from sanic.response import json, text
 from sanic import Blueprint
 from sanic.request import Request
 
@@ -54,10 +54,57 @@ def protected(wrapped):
 async def add_student(request: Request):
     student_data = request.json
 
-    return response.json(
+    return json(
         {
             "message": "Student added successfully.",
             "student_id": "mock_32_char_hex_id",
             "student_data": student_data,
         }
     )
+
+
+@auth.post("/auth")
+async def validate_user(request: Request):
+    try:
+        role = request.json.get("role")
+        username = request.json.get("userName")
+        password = request.json.get("password")
+
+        if role == "Admin":
+            query = """
+            SELECT COUNT(1)
+            FROM admin
+            WHERE name='%s' AND password='%s'
+            """
+            params = (username, password)
+            request.app.ctx.cursor.execute(query, params)
+            result = request.app.ctx.cursor.fetchone()
+
+            if result == 0:
+                return json({"success": False, "error": {"Admin does not exist"}})
+            else:
+                encoded = jwt.encode(
+                    {"username": username}, request.app.config.SECRET, algorithm="HS256"
+                )
+                return json({"token": encoded, "success": True})
+
+        if role == "Student":
+            query = """
+            SELECT COUNT(1)
+            FROM student_data 
+            WHERE reg_no='%s' AND password='%s'
+            """
+            params = (username, password)
+            request.app.ctx.cursor.execute(query, params)
+            result = request.app.ctx.cursor.fetchone()
+
+            if result == 0:
+                return json({"success": False, "error": {"Student does not exist"}})
+            else:
+                encoded = jwt.encode(
+                    {"username": username}, request.app.config.SECRET, algorithm="HS256"
+                )
+                return json({"token": encoded, "success": True})
+
+    except:
+        pass

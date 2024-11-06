@@ -1,15 +1,19 @@
-from sanic import Sanic
-from db_linux import db_config
-import mariadb
-from sanic_cors import CORS
-
-# from sanic_ext import Extend
 from .api import api
+from db_linux import db_config
+from sanic import Sanic
+from sanic_cors import CORS
+import dotenv
+import mariadb
+import os
+
+dotenv.load_dotenv()
+
 
 app = Sanic("LaundryManagementSystem")
 app.blueprint(api)
 CORS(app)
 
+app.config.SECRET = os.environ.get("JWT_SECRET")
 
 conn = None
 
